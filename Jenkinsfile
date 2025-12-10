@@ -14,7 +14,7 @@ pipeline {
         }
         stage('CloudMaster') {
             steps {
-                echo 'hello CloudMaster'
+                echo 'Hello CloudMaster'
             }
         }
     }

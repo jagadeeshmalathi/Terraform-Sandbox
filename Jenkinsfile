@@ -12,5 +12,10 @@ pipeline {
                 sh 'hostname'
             }
         }
+        stage('CloudMaster') {
+            steps {
+                echo 'hello CloudMaster'
+            }
+        }
     }
 }

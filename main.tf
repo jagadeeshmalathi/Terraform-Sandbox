@@ -1,15 +1,16 @@
+#EC2_instance
+
 resource "aws_instance" "my_ec2" {
 ami = "ami-068c0051b15cdb816"
 instance_type = "t2.micro"
-key_pair = "Jenkins-Slave"
 vpc_security_group_ids = [aws_security_group.my_sg.id]
 }
 
+#security_group
 
 resource "aws_security_group" "my_sg" {
   name        = "my-terraform-sg"
   description = "Allow SSH and HTTP inbound traffic"
-  vpc_id      =  aws_vpc.my-vpc.id
 
 
   # Inbound rules

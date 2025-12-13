@@ -1,4 +1,3 @@
-# FIXED COMPLETE CODE
 resource "aws_s3_bucket" "application_audit_logs" {  
   bucket = "unique-audit-log-bucket-${random_id.bucket_suffix.hex}"
   tags = {

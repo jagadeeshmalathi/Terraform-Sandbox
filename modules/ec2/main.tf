@@ -1,7 +1,7 @@
 #EC2_instance---------------------------------------------
 
 resource "aws_instance" "my_ec2" {
-count = 2
+count = var.count
 ami = var.ami
 instance_type = var.instance_type
 vpc_security_group_ids = [aws_security_group.my_sg.id]
@@ -14,7 +14,7 @@ tags = {
 #security_group---------------------------------------------
 
 resource "aws_security_group" "my_sg" {
-  name        = "my-terraform-sg"
+  name        = var.sg_name
   description = "Allow SSH and HTTP inbound traffic"
 
 

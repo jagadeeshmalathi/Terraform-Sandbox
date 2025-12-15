@@ -8,7 +8,7 @@ variable "instance_type" {
  type    = string
 }
 
-variable "count" {
+variable "count-num" {
  description = "creates number of ec2"
  type = number
 }

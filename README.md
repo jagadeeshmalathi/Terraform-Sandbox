@@ -1,30 +1,54 @@
-# AWS VPC and EC2 Terraform Deployment
+AWS S3 Audit Logs Terraform Deployment (Module-Based)
 
-This Terraform project provisions a basic AWS infrastructure, including a VPC, an Internet Gateway, a public subnet, and an EC2 instance. The EC2 instance is launched in the public subnet with an initial stopped state.
+This Terraform project provisions a secure AWS S3 bucket for storing sensitive application audit logs using a modular Terraform design.
 
-## Project Structure
+The solution enforces security best practices such as private access, encryption at rest, versioning, and lifecycle management, making it suitable for compliance and audit use cases.
 
-- `main.tf` — Contains resource definitions for your AWS infrastructure.
-- `variables.tf` — Contains input variable declarations to configure the deployment.
-- `outputs.tf` — (Optional) Contains outputs to display useful information after deployment.
+Project Structure
 
-## Resources Created
+modules/s3-audit-logs/
 
-- **VPC**: A Virtual Private Cloud with DNS support and DNS hostnames enabled.
-- **Internet Gateway**: To enable internet connectivity for the VPC.
-- **Public Subnet**: Subnet mapped to a specific availability zone with public IP assignment on launch.
-- **EC2 Instance**: Amazon Linux 2 instance, type `t2.micro`, located in the public subnet.
-- **EC2 Instance State**: Managed state of the instance, set to `stopped` initially.
+main.tf — Contains resource definitions for the S3 bucket, encryption, versioning, and lifecycle rules.
 
-## Variables
+variables.tf — Contains input variables required by the S3 audit logs module.
 
-Input variables are defined in `variables.tf`. Typical variables include:
+outputs.tf — Exposes module outputs such as bucket name and KMS key ARN.
 
-| Variable Name         | Description                        | Default Value    |
-|-----------------------|----------------------------------|------------------|
-| `vpc_cidr`            | CIDR block for the VPC            | `"10.0.0.0/16"`  |
-| `public_subnet_cidr`   | CIDR block for the public subnet  | `"10.0.1.0/24"`  |
+modules.tf — Root module that calls the reusable S3 audit logs module.
 
-You can override these defaults by creating a `terraform.tfvars` file or passing variables via CLI.
+provider.tf — AWS provider configuration.
 
-Example `variables.tf`:
+output.tf — Root-level outputs.
+
+README.md — Project documentation.
+
+Resources Created
+
+S3 Bucket:
+A private S3 bucket used to store application audit logs.
+
+Public Access Block:
+Blocks all public access via ACLs and bucket policies.
+
+S3 Bucket Versioning:
+Enables versioning to protect against accidental object deletion or overwrite.
+
+Server-Side Encryption:
+Encrypts all objects at rest using AWS KMS.
+
+S3 Lifecycle Policy:
+Automatically transitions objects and non-current object versions to STANDARD_IA after 30 days to reduce storage costs.
+
+Variables
+
+Input variables are defined in variables.tf. Typical variables include:
+
+Variable Name	Description	Required
+bucket_name	Globally unique S3 bucket name	Yes
+aws_region	AWS region for resource deployment	Yes
+
+Variables can be overridden by passing values via the CLI or by using a terraform.tfvars file.
+
+Example usage:
+
+terraform plan -var="bucket_name=my-audit-logs-bucket-123"
